@@ -3,17 +3,17 @@ ambassador:
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
   command: >
-    -name atlassiantestdocker_postgres_1
-    -name atlassiantestdocker_crowd_1
-    -name atlassiantestdocker_jira_1
-    -name atlassiantestdocker_stash_1
-    -name atlassiantestdocker_bamboo_1
-    -name atlassiantestdocker_confluence_1
-    -name atlassiantestdocker_nginx_1
+    - name atlassiantestdocker_postgres_1
+    - name atlassiantestdocker_crowd_1
+    - name atlassiantestdocker_jira_1
+    - name atlassiantestdocker_stash_1
+    - name atlassiantestdocker_bamboo_1
+    - name atlassiantestdocker_confluence_1
+    - name atlassiantestdocker_nginx_1
 
 postgresFiles:
   image: postgres:latest
-  command: true
+  command: "true"
 postgres:
   image: postgres:latest
   environment:
@@ -30,13 +30,13 @@ postgres:
 
 crowdFiles:
   image: pghalliday/crowd:latest
-  command: true
+  command: "true"
 crowd:
   image: pghalliday/crowd:latest
   environment:
-    - CROWD_PROXY_NAME=crowd.test.net
+    - CROWD_PROXY_NAME=auth.peerpont.com
     - CROWD_PROXY_PORT=80
-    - CROWDID_POSTGRES_HOST=postgres.test.net
+    - CROWDID_POSTGRES_HOST=postgres.peerpont.com
     - CROWDID_POSTGRES_PORT=5432
     - CROWDID_POSTGRES_USER=crowdid
     - CROWDID_POSTGRES_PASSWORD=crowdid
@@ -45,52 +45,52 @@ crowd:
   volumes:
     - crowd.xml:/crowd.xml
   links:
-    - ambassador:postgres.test.net
-    - ambassador:crowd.test.net
-    - ambassador:jira.test.net
-    - ambassador:stash.test.net
-    - ambassador:bamboo.test.net
-    - ambassador:confluence.test.net
+    - ambassador:postgres.peerpont.com
+    - ambassador:auth.peerpont.com
+    - ambassador:jira.peerpont.com
+    - ambassador:stash.peerpont.com
+    - ambassador:build.peerpont.com
+    - ambassador:wiki.peerpont.com
   volumes_from:
     - crowdFiles
 
 jiraFiles:
   image: pghalliday/jira:latest
-  command: true
+  command: "true"
 jira:
   image: pghalliday/jira:latest
   environment:
-    - JIRA_PROXY_NAME=jira.test.net
+    - JIRA_PROXY_NAME=jira.peerpont.com
     - JIRA_PROXY_PORT=80
     - JIRA_CROWD_APPLICATION_NAME=jira
     - JIRA_CROWD_APPLICATION_PASSWORD=jira
-    - JIRA_CROWD_BASE_URL=http://crowd.test.net/crowd
+    - JIRA_CROWD_BASE_URL=http://auth.peerpont.com/crowd
     - JIRA_CROWD_SESSION_VALIDATION_INTERVAL=2
   links:
-    - ambassador:postgres.test.net
-    - ambassador:crowd.test.net
-    - ambassador:jira.test.net
-    - ambassador:stash.test.net
-    - ambassador:bamboo.test.net
-    - ambassador:confluence.test.net
+    - ambassador:postgres.peerpont.com
+    - ambassador:auth.peerpont.com
+    - ambassador:jira.peerpont.com
+    - ambassador:stash.peerpont.com
+    - ambassador:build.peerpont.com
+    - ambassador:wiki.peerpont.com
   volumes_from:
     - jiraFiles
 
 stashFiles:
   image: pghalliday/stash:latest
-  command: true
+  command: "true"
 stash:
   image: pghalliday/stash:latest
   environment:
-    - STASH_PROXY_NAME=stash.test.net
+    - STASH_PROXY_NAME=stash.peerpont.com
     - STASH_PROXY_PORT=80
   links:
-    - ambassador:postgres.test.net
-    - ambassador:crowd.test.net
-    - ambassador:jira.test.net
-    - ambassador:stash.test.net
-    - ambassador:bamboo.test.net
-    - ambassador:confluence.test.net
+    - ambassador:postgres.peerpont.com
+    - ambassador:auth.peerpont.com
+    - ambassador:jira.peerpont.com
+    - ambassador:stash.peerpont.com
+    - ambassador:build.peerpont.com
+    - ambassador:wiki.peerpont.com
   volumes_from:
     - stashFiles
   ports:
@@ -98,48 +98,48 @@ stash:
 
 bambooFiles:
   image: pghalliday/bamboo:latest
-  command: true
+  command: "true"
 bamboo:
   image: pghalliday/bamboo:latest
   environment:
-    - BAMBOO_PROXY_NAME=bamboo.test.net
+    - BAMBOO_PROXY_NAME=build.peerpont.com
     - BAMBOO_PROXY_PORT=80
   links:
-    - ambassador:postgres.test.net
-    - ambassador:crowd.test.net
-    - ambassador:jira.test.net
-    - ambassador:stash.test.net
-    - ambassador:bamboo.test.net
-    - ambassador:confluence.test.net
+    - ambassador:postgres.peerpont.com
+    - ambassador:auth.peerpont.com
+    - ambassador:jira.peerpont.com
+    - ambassador:stash.peerpont.com
+    - ambassador:build.peerpont.com
+    - ambassador:wiki.peerpont.com
   volumes_from:
     - bambooFiles
 
 confluenceFiles:
   image: pghalliday/confluence:latest
-  command: true
+  command: "true"
 confluence:
   image: pghalliday/confluence:latest
   environment:
-    - CONFLUENCE_PROXY_NAME=confluence.test.net
+    - CONFLUENCE_PROXY_NAME=wiki.peerpont.com
     - CONFLUENCE_PROXY_PORT=80
   links:
-    - ambassador:postgres.test.net
-    - ambassador:crowd.test.net
-    - ambassador:jira.test.net
-    - ambassador:stash.test.net
-    - ambassador:bamboo.test.net
-    - ambassador:confluence.test.net
+    - ambassador:postgres.peerpont.com
+    - ambassador:auth.peerpont.com
+    - ambassador:jira.peerpont.com
+    - ambassador:stash.peerpont.com
+    - ambassador:build.peerpont.com
+    - ambassador:wiki.peerpont.com
   volumes_from:
     - confluenceFiles
 
 nginx:
   image: nginx:latest
   links:
-    - ambassador:crowd.test.net
-    - ambassador:jira.test.net
-    - ambassador:stash.test.net
-    - ambassador:bamboo.test.net
-    - ambassador:confluence.test.net
+    - ambassador:auth.peerpont.com
+    - ambassador:jira.peerpont.com
+    - ambassador:stash.peerpont.com
+    - ambassador:build.peerpont.com
+    - ambassador:wiki.peerpont.com
   volumes:
     - crowd.conf:/etc/nginx/conf.d/crowd.conf
     - jira.conf:/etc/nginx/conf.d/jira.conf
