@@ -1,3 +1,3 @@
 FROM pghalliday/jira:latest
 
-RUN cd /opt/jira/current/ && chown -R stash:stash .
+RUN cd /opt/atlassian/jira/current/ && chown -R jira:jira .
