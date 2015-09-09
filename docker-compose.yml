@@ -55,10 +55,10 @@ crowd:
     - crowdFiles
 
 jiraFiles:
-  image: pghalliday/jira:latest
+  image: jira:latest
   command: "true"
 jira:
-  image: pghalliday/jira:latest
+  image: jira:latest
   environment:
     - JIRA_PROXY_NAME=jira.peerpont.com
     - JIRA_PROXY_PORT=80
@@ -77,10 +77,10 @@ jira:
     - jiraFiles
 
 stashFiles:
-  image: pghalliday/stash:latest
+  image: stash:latest
   command: "true"
 stash:
-  image: pghalliday/stash:latest
+  image: stash:latest
   environment:
     - STASH_PROXY_NAME=stash.peerpont.com
     - STASH_PROXY_PORT=80
